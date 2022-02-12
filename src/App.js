@@ -1,5 +1,7 @@
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css'
 import React from 'react'
+import { Navbar, Container, Row, Col, Table, Form, Card } from 'react-bootstrap';
 
 const cols = [
     // {
@@ -46,7 +48,7 @@ const db = [
     },
 ]
 
-class Container extends React.Component {
+class AppContainer extends React.Component {
     constructor(props) {
         super(props)
 
@@ -93,18 +95,44 @@ class Container extends React.Component {
     render() {
         console.log(JSON.stringify(this.state))
         return (
-            <>
-                <div>
-                    <FilterForm
-                        filterOptions={this.generateFilterOptions("species")}
-                        handleExcludes={this.handleExcludes}
-                        handleIncludeString={this.handleIncludeString}
-                    />
-                </div>
-                <div>
-                    <CatalogTable columns={this.props.fields} data={this.props.data} />
-                </div>
-            </>
+            <Container fluid="lg">
+                <Row>
+                    <Col xs={3}>
+                        <Card>
+                            <Card.Header>
+                                <Card.Title>Filters</Card.Title>
+                            </Card.Header>
+                            <Card.Body>
+                                <FilterForm
+                                    filterOptions={this.generateFilterOptions("species")}
+                                    handleExcludes={this.handleExcludes}
+                                    handleIncludeString={this.handleIncludeString}
+                                />
+                            </Card.Body>
+                        </Card>
+                    </Col>
+                    <Col>
+                        <Card>
+                            <Card.Header>
+                                <Row>
+                                    <Col>
+                                        <Card.Title>Catalog</Card.Title>
+                                    </Col>
+                                    <Col>
+                                        <FilterFormField callback={this.handleIncludeString} />
+                                    </Col>
+                                </Row>
+                            </Card.Header>
+                            <Card.Body>
+                                <CatalogTable 
+                                    columns={this.props.fields} 
+                                    data={this.props.data} 
+                                />
+                            </Card.Body>
+                        </Card>
+                    </Col>
+                </Row>
+            </Container>
         )
     }
 }
@@ -134,12 +162,16 @@ class CatalogTable extends React.Component {
 
     render() {
         return (
-            <table>
-                <thead>
-                    {this.headerRow()}
-                    {this.dataRows()}
-                </thead>
-            </table>
+            <>
+                <Table striped bordered hover>
+                    <thead>
+                        {this.headerRow()}
+                    </thead>
+                    <tbody>
+                        {this.dataRows()}
+                    </tbody>
+                </Table>
+            </>
         )
     }
 }
@@ -147,13 +179,12 @@ class CatalogTable extends React.Component {
 class FilterForm extends React.Component {
     render() {
         return (
-            <>
+            <Form.Group>
                 <FilterFormList
                     filterOptions={this.props.filterOptions}
                     callback={this.props.handleExcludes}
                 />
-                <FilterFormField callback={this.props.handleIncludeString} />
-            </>
+            </Form.Group>
         )
     }
 }
@@ -180,14 +211,12 @@ class FilterFormCheckbox extends React.Component {
 
     render() {
         return (
-            <label>
-                <input
-                    type="checkbox"
-                    defaultChecked="true"
-                    onChange={this.handleChange}
-                />
-                {this.props.label}
-            </label>
+            <Form.Check
+                type="checkbox"
+                label={this.props.label}
+                defaultChecked="true"
+                onChange={this.handleChange} 
+            />
         )
     }
 
@@ -205,10 +234,12 @@ class FilterFormField extends React.Component {
 
     render() {
         return (
-            <label>
-                Filter:
-                <input type="text" onChange={this.handleChange} />
-            </label>
+            <Form.Control 
+                size="sm" 
+                type="text" 
+                placeholder="Filter" 
+                onChange={this.handleChange}
+            />
         )
     }
 
@@ -220,7 +251,11 @@ class FilterFormField extends React.Component {
 }
 
 function App() {
-    return <Container name="Commands App Container" fields={cols} data={db} />
+    return (
+        <div className="App">
+            <AppContainer name="Commands App Container" fields={cols} data={db} />
+        </div>
+    )
 }
 
 export default App
