@@ -92,15 +92,46 @@ class AppContainer extends React.Component {
         return [...new Set(this.props.data.map((object) => object[key]))]
     }
 
+    filterDataExcludes(data) {
+        return (
+            data.filter((row) => {
+                return (!this.state.excludes.includes(row.species))
+            })
+        )
+    }
+
+    filterDataIncludeString(data) {
+        return (
+            data.filter((row) => {
+                return (
+                    JSON.stringify(row).toLowerCase().includes(this.state.includeString.toLowerCase())
+                )
+            })
+        )
+    }
+
     render() {
         console.log(JSON.stringify(this.state))
+
+        let filteredData = []
+        
+        if (this.state.excludes) {
+            filteredData = this.filterDataExcludes(this.props.data)
+        } else {
+            filteredData = this.filterDataExcludes(this.props.data)
+        }
+
+        if (this.state.includeString) {
+            filteredData = this.filterDataIncludeString(filteredData)
+        }
+
         return (
             <Container fluid="lg">
                 <Row>
                     <Col xs={3}>
                         <Card>
                             <Card.Header>
-                                <Card.Title>Filters</Card.Title>
+                                <Card.Title>Species</Card.Title>
                             </Card.Header>
                             <Card.Body>
                                 <FilterForm
@@ -126,7 +157,7 @@ class AppContainer extends React.Component {
                             <Card.Body>
                                 <CatalogTable 
                                     columns={this.props.fields} 
-                                    data={this.props.data} 
+                                    data={filteredData} 
                                 />
                             </Card.Body>
                         </Card>
