@@ -1,7 +1,50 @@
 import './App.css'
 import React from 'react'
 
-const filterOptions = ['cat', 'dog', 'blue-tongued skink']
+const cols = [
+    // {
+    //     label: 'ID',
+    //     key: 'id',
+    // },
+    {
+        label: 'Name',
+        key: 'name',
+    },
+    {
+        label: 'Species',
+        key: 'species',
+    },
+    {
+        label: 'Color',
+        key: 'color',
+    },
+]
+
+const db = [
+    {
+        id: 1,
+        name: 'Berlioz',
+        species: 'cat',
+        color: 'tuxedo',
+    },
+    {
+        id: 2,
+        name: 'O\'Malley',
+        species: 'cat',
+        color: 'orange',
+    },
+    {
+        id: 5,
+        name: 'Patou',
+        species: 'dog',
+        color: 'brown',
+    },
+    {
+        id: 4,
+        species: 'blue-tongued skink',
+        color: 'gray',
+    },
+]
 
 class Container extends React.Component {
     constructor(props) {
@@ -43,11 +86,15 @@ class Container extends React.Component {
         this.setState({ includeString: filterString })
     }
 
+    generateFilterOptions(key) {
+        return [...new Set(this.props.data.map((object) => object[key]))]
+    }
+
     render() {
         console.log(JSON.stringify(this.state))
         return (
             <FilterForm
-                filterOptions={filterOptions}
+                        filterOptions={this.generateFilterOptions("species")}
                 handleExcludes={this.handleExcludes}
                 handleIncludeString={this.handleIncludeString}
             />
@@ -131,7 +178,7 @@ class FilterFormField extends React.Component {
 }
 
 function App() {
-    return <Container name="Commands App Container" />
+    return <Container name="Commands App Container" fields={cols} data={db} />
 }
 
 export default App
