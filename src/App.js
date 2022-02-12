@@ -93,11 +93,53 @@ class Container extends React.Component {
     render() {
         console.log(JSON.stringify(this.state))
         return (
-            <FilterForm
+            <>
+                <div>
+                    <FilterForm
                         filterOptions={this.generateFilterOptions("species")}
-                handleExcludes={this.handleExcludes}
-                handleIncludeString={this.handleIncludeString}
-            />
+                        handleExcludes={this.handleExcludes}
+                        handleIncludeString={this.handleIncludeString}
+                    />
+                </div>
+                <div>
+                    <CatalogTable columns={this.props.fields} data={this.props.data} />
+                </div>
+            </>
+        )
+    }
+}
+
+class CatalogTable extends React.Component {
+    headerRow() {
+        return (
+            <tr>
+                {this.props.columns.map((column) => {
+                    return <th>{column.label}</th>
+                })}
+            </tr>
+        )
+    }
+
+    dataRows() {
+        return this.props.data.map((object) => {
+            return (
+                <tr>
+                    {this.props.columns.map((column) => {
+                        return <td>{object[column.key]}</td>
+                    })} 
+                </tr>
+            )
+        })
+    }
+
+    render() {
+        return (
+            <table>
+                <thead>
+                    {this.headerRow()}
+                    {this.dataRows()}
+                </thead>
+            </table>
         )
     }
 }
