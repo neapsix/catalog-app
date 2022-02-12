@@ -1,25 +1,137 @@
-import logo from './logo.svg';
-import './App.css';
+import './App.css'
+import React from 'react'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const filterOptions = ['cat', 'dog', 'blue-tongued skink']
+
+class Container extends React.Component {
+    constructor(props) {
+        super(props)
+
+        this.state = { includeString: '', excludes: [] }
+
+        this.handleExcludes = this.handleExcludes.bind(this)
+        this.handleIncludeString = this.handleIncludeString.bind(this)
+    }
+
+    addExcludes(...args) {
+        this.setState((state) => {
+            return { excludes: [...state.excludes, ...args] }
+        })
+    }
+
+    removeExcludes(...args) {
+        args.forEach((argsItem) =>
+            this.setState((state) => {
+                return {
+                    excludes: state.excludes.filter(
+                        (excludesItem) => excludesItem !== argsItem
+                    ),
+                }
+            })
+        )
+    }
+
+    handleExcludes(filterString, value) {
+        if (!value) {
+            this.addExcludes(filterString)
+        } else {
+            this.removeExcludes(filterString)
+        }
+    }
+
+    handleIncludeString(filterString) {
+        this.setState({ includeString: filterString })
+    }
+
+    render() {
+        console.log(JSON.stringify(this.state))
+        return (
+            <FilterForm
+                filterOptions={filterOptions}
+                handleExcludes={this.handleExcludes}
+                handleIncludeString={this.handleIncludeString}
+            />
+        )
+    }
 }
 
-export default App;
+class FilterForm extends React.Component {
+    render() {
+        return (
+            <>
+                <FilterFormList
+                    filterOptions={this.props.filterOptions}
+                    callback={this.props.handleExcludes}
+                />
+                <FilterFormField callback={this.props.handleIncludeString} />
+            </>
+        )
+    }
+}
+
+class FilterFormList extends React.Component {
+    render() {
+        return this.props.filterOptions.map((filterString) => {
+            return (
+                <FilterFormCheckbox
+                    label={filterString}
+                    callback={this.props.callback}
+                />
+            )
+        })
+    }
+}
+
+class FilterFormCheckbox extends React.Component {
+    constructor(props) {
+        super(props)
+
+        this.handleChange = this.handleChange.bind(this)
+    }
+
+    render() {
+        return (
+            <label>
+                <input
+                    type="checkbox"
+                    defaultChecked="true"
+                    onChange={this.handleChange}
+                />
+                {this.props.label}
+            </label>
+        )
+    }
+
+    handleChange(event) {
+        this.props.callback(this.props.label, event.target.checked)
+    }
+}
+
+class FilterFormField extends React.Component {
+    constructor(props) {
+        super(props)
+
+        this.handleChange = this.handleChange.bind(this)
+    }
+
+    render() {
+        return (
+            <label>
+                Filter:
+                <input type="text" onChange={this.handleChange} />
+            </label>
+        )
+    }
+
+    handleChange(event) {
+        this.props.callback(event.target.value)
+
+        event.preventDefault()
+    }
+}
+
+function App() {
+    return <Container name="Commands App Container" />
+}
+
+export default App
