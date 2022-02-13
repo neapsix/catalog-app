@@ -1,7 +1,8 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './App.css'
 import React from 'react'
-import { Container, Row, Col, Table, Form, Button, Card } from 'react-bootstrap'
+import { Container, Row, Col, Card, Table, Form, Button } from 'react-bootstrap'
+import {CSVLink} from 'react-csv';
 
 const cols = [
     // {
@@ -187,6 +188,10 @@ class AppContainer extends React.Component {
                         <Button variant="link" size="sm" onClick={this.explode}>
                             Reset all
                         </Button>
+                        <DownloadCSVButton
+                            filename={"catalog_filtered.csv"}
+                            data={this.props.data} 
+                        />
                     </Col>
                     <Col>
                         <CatalogTableCard
@@ -369,6 +374,37 @@ class FilterFormField extends React.Component {
         this.props.callback(event.target.value)
 
         event.preventDefault()
+    }
+}
+
+class DownloadCSVButton extends React.Component {
+    constructor(props) {
+        super(props)
+
+        // Define a ref to use for the secret CSV link
+        this.csvLink = React.createRef()
+
+        this.handleClick = this.handleClick.bind(this)
+    }
+
+    handleClick() {
+        // Click the hidden link by using the ref to access it
+        this.csvLink.current.link.click()
+    }
+
+    render () {
+        return (
+            <>
+                <Button variant="link" size="sm" onClick={this.handleClick}>Download as CSV</Button>
+                <CSVLink 
+                    data={this.props.data} 
+                    className="hidden"
+                    ref={this.csvLink}
+                    filename={this.props.filename} 
+                    target="_blank"
+                />
+            </>
+        )
     }
 }
 
