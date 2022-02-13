@@ -116,7 +116,7 @@ class AppContainer extends React.Component {
         )
     }
 
-    handleExcludes(value, ...args) {
+    handleExcludes(value, args) {
         if (!value) {
             this.addExcludes(...args)
         } else {
