@@ -3,8 +3,12 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## To Do
-- [ ] Refactor exclude checkboxes so that every checkbox has a state value from the start.
+- [x] Add styling and components from react-bootstrap
+- [x] Add Reset all filters option
+- [x] Add Download as CSV option
+- [x] Add pop-up Details form
 - [ ] Add custom exclude checkboxes so that the display name doesn't have to match the filter string.
+- [ ] Refactor exclude checkboxes so that every checkbox has a state value from the start. This change would allow for a more functional All/None link instead of the Reset all link.
 - [ ] Write new README file.
 
 ## Available Scripts
