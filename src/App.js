@@ -528,7 +528,7 @@ class FilterFormCheckbox extends React.Component {
     handleChange(event) {
         const filterObject = {}
         filterObject[this.props.field] = this.props.filterString
-        this.props.callback(event.target.checked, filterObject)
+        this.props.callback(event.target.checked, [filterObject])
     }
 }
 
