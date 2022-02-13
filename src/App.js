@@ -1,7 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css'
 import React from 'react'
-import { Navbar, Container, Row, Col, Table, Form, Card } from 'react-bootstrap';
+import { Container, Row, Col, Table, Form, Card } from 'react-bootstrap';
 
 const cols = [
     // {
