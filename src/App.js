@@ -402,13 +402,15 @@ class FilterFormList extends React.Component {
                 {this.props.filterOptions.map((filterString, index) => {
                     let overrideLabel
 
-                    // Check override labels array to see if there's one for
-                    // this filterString. If not, the label is the filterString
-                    for (let element of this.props.overrideLabels) {
-                        const optionToOverride = Object.keys(element)[0]
+                    if (this.props.overrideLabels) {
+                        // Check override labels array to see if there's one for
+                        // this filterString. If not, the label is the filterString
+                        for (let element of this.props.overrideLabels) {
+                            const optionToOverride = Object.keys(element)[0]
 
-                        if (filterString === optionToOverride) {
-                            overrideLabel = element[optionToOverride]
+                            if (filterString === optionToOverride) {
+                                overrideLabel = element[optionToOverride]
+                            }
                         }
                     }
 
