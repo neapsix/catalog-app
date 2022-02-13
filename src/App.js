@@ -212,20 +212,20 @@ class AppContainer extends React.Component {
 class CatalogTable extends React.Component {
     headerRow() {
         return (
-            <tr>
-                {this.props.columns.map((column) => {
-                    return <th>{column.label}</th>
+            <tr key="0">
+                {this.props.columns.map((column, index) => {
+                    return <th key={index}>{column.label}</th>
                 })}
             </tr>
         )
     }
 
     dataRows() {
-        return this.props.data.map((object) => {
+        return this.props.data.map((object, index) => {
             return (
-                <tr>
-                    {this.props.columns.map((column) => {
-                        return <td>{object[column.key]}</td>
+                <tr key={index}>
+                    {this.props.columns.map((column, index) => {
+                        return <td key={index}>{object[column.key]}</td>
                     })} 
                 </tr>
             )
@@ -270,20 +270,19 @@ class FilterForm extends React.Component {
 class FilterFormList extends React.Component {
     render() {
         return (
-            <ul className='ul-checkbox'>
-                {this.props.filterOptions.map((filterString, index) => {
-                    return (
-                        <li>
-                            <FilterFormCheckbox
-                                key={index}
-                                label={filterString}
-                                field={this.props.forColumn}
-                                callback={this.props.callback}
-                            />
-                        </li>
-                    )
-                })}
-            </ul>
+                <ul className='ul-checkbox'>
+                    {this.props.filterOptions.map((filterString, index) => {
+                        return (
+                            <li key={index}>
+                                <FilterFormCheckbox
+                                    label={filterString}
+                                    field={this.props.forColumn}
+                                    callback={this.props.callback}
+                                />
+                            </li>
+                        )
+                    })}
+                </ul>
         )
     }
 }
