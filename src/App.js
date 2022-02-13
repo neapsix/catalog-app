@@ -116,11 +116,11 @@ class AppContainer extends React.Component {
         )
     }
 
-    handleExcludes(filterObject, value) {
+    handleExcludes(value, ...args) {
         if (!value) {
-            this.addExcludes(filterObject)
+            this.addExcludes(...args)
         } else {
-            this.removeExcludes(filterObject)
+            this.removeExcludes(...args)
         }
     }
 
@@ -433,7 +433,7 @@ class FilterFormCheckbox extends React.Component {
     handleChange(event) {
         const filterObject = {}
         filterObject[this.props.field] = this.props.label
-        this.props.callback(filterObject, event.target.checked)
+        this.props.callback(event.target.checked, filterObject)
     }
 }
 
