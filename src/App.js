@@ -191,6 +191,7 @@ class AppContainer extends React.Component {
                             filterOptions={this.generateFilterOptions(
                                 'species'
                             )}
+                            overrideLabels={[{ cat: 'kitty cat' }]}
                             forColumn="species"
                             handleExcludes={this.handleExcludes}
                         />
@@ -369,6 +370,7 @@ class FilterCard extends React.Component {
                 <Card.Body>
                     <FilterForm
                         filterOptions={this.props.filterOptions}
+                        overrideLabels={this.props.overrideLabels}
                         forColumn={this.props.forColumn}
                         handleExcludes={this.props.handleExcludes}
                     />
@@ -384,6 +386,7 @@ class FilterForm extends React.Component {
             <Form.Group>
                 <FilterFormList
                     filterOptions={this.props.filterOptions}
+                    overrideLabels={this.props.overrideLabels}
                     forColumn={this.props.forColumn}
                     callback={this.props.handleExcludes}
                 />
@@ -397,10 +400,23 @@ class FilterFormList extends React.Component {
         return (
             <ul className="ul-checkbox">
                 {this.props.filterOptions.map((filterString, index) => {
+                    let overrideLabel
+
+                    // Check override labels array to see if there's one for
+                    // this filterString. If not, the label is the filterString
+                    for (let element of this.props.overrideLabels) {
+                        const optionToOverride = Object.keys(element)[0]
+
+                        if (filterString === optionToOverride) {
+                            overrideLabel = element[optionToOverride]
+                        }
+                    }
+
                     return (
                         <li key={index}>
                             <FilterFormCheckbox
-                                label={filterString}
+                                label={overrideLabel || filterString}
+                                filterString={filterString}
                                 field={this.props.forColumn}
                                 callback={this.props.callback}
                             />
@@ -432,7 +448,7 @@ class FilterFormCheckbox extends React.Component {
 
     handleChange(event) {
         const filterObject = {}
-        filterObject[this.props.field] = this.props.label
+        filterObject[this.props.field] = this.props.filterString
         this.props.callback(event.target.checked, filterObject)
     }
 }
