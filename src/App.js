@@ -56,6 +56,31 @@ const db = [
         species: 'blue-tongued skink',
         color: 'gray',
     },
+    {
+        id: 6,
+        name: 'Scat Cat',
+        species: 'cat',
+        color: 'tuxedo',
+    },
+    {
+        id: 7,
+        name: 'Uncle Waldo',
+        species: 'goose',
+        color: 'white',
+        possessions: 'great hat',
+    },
+    {
+        id: 8,
+        name: 'Toulouse',
+        species: 'cat',
+        color: 'orange',
+    },
+    {
+        id: 1,
+        name: 'Marie',
+        species: 'cat',
+        color: 'white',
+    },
 ]
 
 const multiFiltersColor = [
