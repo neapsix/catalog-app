@@ -1,7 +1,16 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './App.css'
 import React from 'react'
-import { Container, Row, Col, Card, Table, Form, Button } from 'react-bootstrap'
+import {
+    Container,
+    Row,
+    Col,
+    Card,
+    Table,
+    Modal,
+    Form,
+    Button,
+} from 'react-bootstrap'
 import { CSVLink } from 'react-csv'
 
 const cols = [
@@ -248,11 +257,11 @@ class CatalogTable extends React.Component {
     dataRows() {
         return this.props.data.map((object, index) => {
             return (
-                <tr key={index}>
-                    {this.props.columns.map((column, index) => {
-                        return <td key={index}>{object[column.key]}</td>
-                    })}
-                </tr>
+                <CatalogTableRow
+                    key={index}
+                    object={object}
+                    columns={this.props.columns}
+                />
             )
         })
     }
@@ -271,6 +280,82 @@ class CatalogTable extends React.Component {
                 </Table>
             </>
         )
+    }
+}
+
+class CatalogTableRow extends React.Component {
+    constructor(props) {
+        super(props)
+
+        // Store state in the row for showing the modal Details form
+        this.state = { show: false }
+
+        this.handleClick = this.handleClick.bind(this)
+    }
+
+    // When you click a row, flip the state that's passed down to the modal
+    handleClick() {
+        this.setState({ show: !this.state.show })
+    }
+
+    render() {
+        return (
+            // Add a row and a cell for each column in the object, plus a
+            // hidden ("d-none") cell to hold the modal Details form.
+            <tr onClick={this.handleClick}>
+                {this.props.columns.map((column, index) => {
+                    return <td key={index}>{this.props.object[column.key]}</td>
+                })}
+                <td className="d-none">
+                    <CatalogItemDetailsModal
+                        show={this.state.show}
+                        handleClick={this.handleClick}
+                        object={this.props.object}
+                    />
+                </td>
+            </tr>
+        )
+    }
+}
+
+class CatalogItemDetailsModal extends React.Component {
+    render() {
+        return (
+            // Note: the modal needs to stop propagation on click, or
+            // else the click gets hijacked by the onClick() function
+            // of the parent. If that happens, the modal incorrectly
+            // closes when you click inside it.
+            <Modal
+                show={this.props.show}
+                onHide={this.props.handleClick}
+                onClick={(e) => e.stopPropagation()}
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title>Details</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <CatalogItemDetailsText object={this.props.object} />
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="primary" onClick={this.props.handleClick}>
+                        Close
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+        )
+    }
+}
+
+class CatalogItemDetailsText extends React.Component {
+    render() {
+        return Object.keys(this.props.object).map((element, index) => {
+            return (
+                <React.Fragment key={index}>
+                    <h5>{element}</h5>
+                    <p>{this.props.object[element]}</p>
+                </React.Fragment>
+            )
+        })
     }
 }
 
