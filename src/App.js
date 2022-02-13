@@ -2,7 +2,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import './App.css'
 import React from 'react'
 import { Container, Row, Col, Card, Table, Form, Button } from 'react-bootstrap'
-import {CSVLink} from 'react-csv';
+import { CSVLink } from 'react-csv'
 
 const cols = [
     // {
@@ -189,8 +189,8 @@ class AppContainer extends React.Component {
                             Reset all
                         </Button>
                         <DownloadCSVButton
-                            filename={"catalog_filtered.csv"}
-                            data={this.props.data} 
+                            filename={'catalog_filtered.csv'}
+                            data={this.props.data}
                         />
                     </Col>
                     <Col>
@@ -392,15 +392,17 @@ class DownloadCSVButton extends React.Component {
         this.csvLink.current.link.click()
     }
 
-    render () {
+    render() {
         return (
             <>
-                <Button variant="link" size="sm" onClick={this.handleClick}>Download as CSV</Button>
-                <CSVLink 
-                    data={this.props.data} 
+                <Button variant="link" size="sm" onClick={this.handleClick}>
+                    Download as CSV
+                </Button>
+                <CSVLink
+                    data={this.props.data}
                     className="hidden"
                     ref={this.csvLink}
-                    filename={this.props.filename} 
+                    filename={this.props.filename}
                     target="_blank"
                 />
             </>
