@@ -2,6 +2,11 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## To Do
+- [ ] Refactor exclude checkboxes so that every checkbox has a state value from the start.
+- [ ] Add custom exclude checkboxes so that the display name doesn't have to match the filter string.
+- [ ] Write new README file.
+
 ## Available Scripts
 
 In the project directory, you can run:
