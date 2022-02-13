@@ -2,3 +2,9 @@
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
 }
+
+.Card-zerostate {
+  text-align: center;
+  color: gray;
+  min-height: 2vh;
+}

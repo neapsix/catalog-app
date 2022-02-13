@@ -233,6 +233,11 @@ class CatalogTable extends React.Component {
     }
 
     render() {
+        // Show a zero state instead of the table if there's no data.
+        if (!this.props.data.length) {
+            return(<div class="Card-zerostate">Nothing to show</div>)
+        }
+
         return (
             <>
                 <Table striped bordered hover>
