@@ -376,7 +376,7 @@ function App() {
     return (
         <div className="App">
             <AppContainer
-                name="Commands App Container"
+                name="Catalog App Container"
                 fields={cols}
                 data={db}
             />
