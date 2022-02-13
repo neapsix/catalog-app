@@ -1,7 +1,7 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/css/bootstrap.min.css'
 import './App.css'
 import React from 'react'
-import { Container, Row, Col, Table, Form, Button, Card } from 'react-bootstrap';
+import { Container, Row, Col, Table, Form, Button, Card } from 'react-bootstrap'
 
 const cols = [
     // {
@@ -31,7 +31,7 @@ const db = [
     },
     {
         id: 2,
-        name: 'O\'Malley',
+        name: "O'Malley",
         species: 'cat',
         color: 'orange',
     },
@@ -76,30 +76,30 @@ class AppContainer extends React.Component {
             this.setState((state) => {
                 return {
                     excludes: state.excludes.filter((stateObject) => {
-                            // Objects in the current state.excludes array
-                            // pass the filter if they aren't equal to the 
-                            // object that we're removing. 
+                        // Objects in the current state.excludes array
+                        // pass the filter if they aren't equal to the
+                        // object that we're removing.
 
-                            // Check deep equality for the two objects.
+                        // Check deep equality for the two objects.
 
-                            // Do they have the same number of keys?
-                            const argsObjectKeys = Object.keys(argsObject)
-                            const stateObjectKeys = Object.keys(stateObject)
+                        // Do they have the same number of keys?
+                        const argsObjectKeys = Object.keys(argsObject)
+                        const stateObjectKeys = Object.keys(stateObject)
 
-                            if (argsObjectKeys.length !== stateObjectKeys.length) {
-                                return true;
+                        if (argsObjectKeys.length !== stateObjectKeys.length) {
+                            return true
+                        }
+
+                        // If so, for each key, do they have the same value?
+                        for (let key of argsObjectKeys) {
+                            if (argsObject[key] !== stateObject[key]) {
+                                return true
                             }
+                        }
 
-                            // If so, for each key, do they have the same value?
-                            for (let key of argsObjectKeys) {
-                                if (argsObject[key] !== stateObject[key]) {
-                                    return true;
-                                }
-                            }
-
-                            // If not, they're equal, so this object in the 
-                            // state.excludes array doesn't pass the filter.
-                            return false;
+                        // If not, they're equal, so this object in the
+                        // state.excludes array doesn't pass the filter.
+                        return false
                     }),
                 }
             })
@@ -124,22 +124,20 @@ class AppContainer extends React.Component {
 
     filterDataExcludes(data) {
         const newData = data.filter((row) => {
-
             // Check each object in the state.excludes array against the row.
             for (let element of this.state.excludes) {
-
                 const columnToCheck = Object.keys(element)[0]
                 const valueToExclude = element[columnToCheck]
-                
+
                 // If the row has the value to exclude in the specified
                 //  column, don't include it in the filtered array.
                 if (row[columnToCheck] === valueToExclude) {
-                    return false;
+                    return false
                 }
             }
 
             // Otherwise, include the row in the filtered array.
-            return true;
+            return true
         })
 
         return newData
@@ -154,7 +152,6 @@ class AppContainer extends React.Component {
         })
 
         return newData
-
     }
 
     explode() {
@@ -164,7 +161,7 @@ class AppContainer extends React.Component {
 
     render() {
         let filteredData = []
-        
+
         if (this.state.excludes[0]) {
             filteredData = this.filterDataExcludes(this.props.data)
         } else {
@@ -185,18 +182,18 @@ class AppContainer extends React.Component {
                             </Card.Header>
                             <Card.Body>
                                 <FilterForm
-                                    filterOptions={this.generateFilterOptions("species")}
+                                    filterOptions={this.generateFilterOptions(
+                                        'species'
+                                    )}
                                     forColumn="species"
                                     handleExcludes={this.handleExcludes}
-                                    handleIncludeString={this.handleIncludeString}
+                                    handleIncludeString={
+                                        this.handleIncludeString
+                                    }
                                 />
                             </Card.Body>
                         </Card>
-                        <Button
-                            variant="link"
-                            size="sm"
-                            onClick={this.explode}
-                        >
+                        <Button variant="link" size="sm" onClick={this.explode}>
                             Reset all
                         </Button>
                     </Col>
@@ -208,14 +205,16 @@ class AppContainer extends React.Component {
                                         <Card.Title>Catalog</Card.Title>
                                     </Col>
                                     <Col>
-                                        <FilterFormField callback={this.handleIncludeString} />
+                                        <FilterFormField
+                                            callback={this.handleIncludeString}
+                                        />
                                     </Col>
                                 </Row>
                             </Card.Header>
                             <Card.Body>
-                                <CatalogTable 
-                                    columns={this.props.fields} 
-                                    data={filteredData} 
+                                <CatalogTable
+                                    columns={this.props.fields}
+                                    data={filteredData}
                                 />
                             </Card.Body>
                         </Card>
@@ -243,7 +242,7 @@ class CatalogTable extends React.Component {
                 <tr key={index}>
                     {this.props.columns.map((column, index) => {
                         return <td key={index}>{object[column.key]}</td>
-                    })} 
+                    })}
                 </tr>
             )
         })
@@ -252,18 +251,14 @@ class CatalogTable extends React.Component {
     render() {
         // Show a zero state instead of the table if there's no data.
         if (!this.props.data.length) {
-            return(<div className="Card-zerostate">Nothing to show</div>)
+            return <div className="Card-zerostate">Nothing to show</div>
         }
 
         return (
             <>
                 <Table striped bordered hover>
-                    <thead>
-                        {this.headerRow()}
-                    </thead>
-                    <tbody>
-                        {this.dataRows()}
-                    </tbody>
+                    <thead>{this.headerRow()}</thead>
+                    <tbody>{this.dataRows()}</tbody>
                 </Table>
             </>
         )
@@ -287,19 +282,19 @@ class FilterForm extends React.Component {
 class FilterFormList extends React.Component {
     render() {
         return (
-                <ul className='ul-checkbox'>
-                    {this.props.filterOptions.map((filterString, index) => {
-                        return (
-                            <li key={index}>
-                                <FilterFormCheckbox
-                                    label={filterString}
-                                    field={this.props.forColumn}
-                                    callback={this.props.callback}
-                                />
-                            </li>
-                        )
-                    })}
-                </ul>
+            <ul className="ul-checkbox">
+                {this.props.filterOptions.map((filterString, index) => {
+                    return (
+                        <li key={index}>
+                            <FilterFormCheckbox
+                                label={filterString}
+                                field={this.props.forColumn}
+                                callback={this.props.callback}
+                            />
+                        </li>
+                    )
+                })}
+            </ul>
         )
     }
 }
@@ -317,7 +312,7 @@ class FilterFormCheckbox extends React.Component {
                 type="checkbox"
                 label={this.props.label}
                 defaultChecked="true"
-                onChange={this.handleChange} 
+                onChange={this.handleChange}
             />
         )
     }
@@ -338,10 +333,10 @@ class FilterFormField extends React.Component {
 
     render() {
         return (
-            <Form.Control 
-                size="sm" 
-                type="text" 
-                placeholder="Filter" 
+            <Form.Control
+                size="sm"
+                type="text"
+                placeholder="Filter"
                 onChange={this.handleChange}
             />
         )
@@ -357,7 +352,11 @@ class FilterFormField extends React.Component {
 function App() {
     return (
         <div className="App">
-            <AppContainer name="Commands App Container" fields={cols} data={db} />
+            <AppContainer
+                name="Commands App Container"
+                fields={cols}
+                data={db}
+            />
         </div>
     )
 }
