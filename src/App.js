@@ -84,24 +84,24 @@ const db = [
 ]
 
 const multiFiltersColor = [
-        {        
-            label: 'orange, tuxedo, or blue',
-            filters: [{'color': 'tuxedo'}, {'color': 'orange'}, {'color': 'blue'}],
-        },
-        {        
-            label: 'brown or gray',
-            filters: [{'color': 'brown'}, {'color': 'gray'}],
-        },
+    {
+        label: 'orange, tuxedo, or blue',
+        filters: [{ color: 'tuxedo' }, { color: 'orange' }, { color: 'blue' }],
+    },
+    {
+        label: 'brown or gray',
+        filters: [{ color: 'brown' }, { color: 'gray' }],
+    },
 ]
 
 const multiFiltersVarious = [
-    {        
+    {
         label: 'cat or gray',
-        filters: [{'species': 'cat'}, {'color': 'gray'}],
+        filters: [{ species: 'cat' }, { color: 'gray' }],
     },
-    {        
+    {
         label: 'Berlioz or skink',
-        filters: [{'name': 'Berlioz'}, {'species': 'blue-tongued skink'}],
+        filters: [{ name: 'Berlioz' }, { species: 'blue-tongued skink' }],
     },
 ]
 function initialState() {
@@ -242,9 +242,7 @@ class AppContainer extends React.Component {
                         />
                         <FilterCard
                             title="Color and Multi-Filters"
-                            filterOptions={this.generateFilterOptions(
-                                'color'
-                            )}
+                            filterOptions={this.generateFilterOptions('color')}
                             overrideLabels={[{ orange: 'tabby' }]}
                             forColumn="color"
                             multiFilters={multiFiltersColor}
@@ -466,59 +464,59 @@ class FilterFormList extends React.Component {
     }
 
     generateSingleFilters() {
-        if (!this.props.filterOptions) { return false; }
+        if (!this.props.filterOptions) {
+            return false
+        }
 
-        return (
-            this.props.filterOptions.map((filterString, index) => {
-                let overrideLabel
+        return this.props.filterOptions.map((filterString, index) => {
+            let overrideLabel
 
-                if (this.props.overrideLabels) {
-                    // Check override labels array to see if there's one for
-                    // this filterString. If not, the label is the filterString
-                    for (let element of this.props.overrideLabels) {
-                        const optionToOverride = Object.keys(element)[0]
+            if (this.props.overrideLabels) {
+                // Check override labels array to see if there's one for
+                // this filterString. If not, the label is the filterString
+                for (let element of this.props.overrideLabels) {
+                    const optionToOverride = Object.keys(element)[0]
 
-                        if (filterString === optionToOverride) {
-                            overrideLabel = element[optionToOverride]
-                        }
+                    if (filterString === optionToOverride) {
+                        overrideLabel = element[optionToOverride]
                     }
                 }
+            }
 
-                return (
-                    <li key={index}>
-                        <FilterFormCheckbox
-                            label={overrideLabel || filterString}
-                            filterString={filterString}
-                            field={this.props.forColumn}
-                            callback={this.props.callback}
-                        />
-                    </li>
-                )
-            })
-        )
+            return (
+                <li key={index}>
+                    <FilterFormCheckbox
+                        label={overrideLabel || filterString}
+                        filterString={filterString}
+                        field={this.props.forColumn}
+                        callback={this.props.callback}
+                    />
+                </li>
+            )
+        })
     }
 
     generateMultiFilters() {
-        if (!this.props.multiFilters) { return false; }
+        if (!this.props.multiFilters) {
+            return false
+        }
 
-        let indexOffset = 0;
+        let indexOffset = 0
         if (this.props.filterOptions) {
             indexOffset = indexOffset + this.props.filterOptions.length
         }
 
-        return (
-            this.props.multiFilters.map((multiFilterObject, index) => {
-                return (
-                    <li key={indexOffset + index}>
-                        <FilterFormMultiFilterCheckbox
-                            label={multiFilterObject.label}
-                            filters={multiFilterObject.filters}
-                            callback={this.props.callback}
-                        />
-                    </li>
-                )}
+        return this.props.multiFilters.map((multiFilterObject, index) => {
+            return (
+                <li key={indexOffset + index}>
+                    <FilterFormMultiFilterCheckbox
+                        label={multiFilterObject.label}
+                        filters={multiFilterObject.filters}
+                        callback={this.props.callback}
+                    />
+                </li>
             )
-        )
+        })
     }
 
     render() {
