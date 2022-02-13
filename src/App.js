@@ -1,7 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css'
 import React from 'react'
-import { Container, Row, Col, Table, Form, Card } from 'react-bootstrap';
+import { Container, Row, Col, Table, Form, Button, Card } from 'react-bootstrap';
 
 const cols = [
     // {
@@ -48,14 +48,21 @@ const db = [
     },
 ]
 
+function initialState() {
+    return { includeString: '', excludes: [] }
+}
+
 class AppContainer extends React.Component {
     constructor(props) {
         super(props)
 
-        this.state = { includeString: '', excludes: [] }
+        this.state = initialState()
 
         this.handleExcludes = this.handleExcludes.bind(this)
         this.handleIncludeString = this.handleIncludeString.bind(this)
+        this.explode = this.explode.bind(this)
+
+        this.key = 0
     }
 
     addExcludes(...args) {
@@ -150,9 +157,12 @@ class AppContainer extends React.Component {
 
     }
 
-    render() {
-        console.log(JSON.stringify(this.state))
+    explode() {
+        this.setState(initialState())
+        ++this.key
+    }
 
+    render() {
         let filteredData = []
         
         if (this.state.excludes[0]) {
@@ -166,7 +176,7 @@ class AppContainer extends React.Component {
         }
 
         return (
-            <Container fluid="lg">
+            <Container fluid="lg" key={this.key}>
                 <Row>
                     <Col xs={3}>
                         <Card>
@@ -182,6 +192,13 @@ class AppContainer extends React.Component {
                                 />
                             </Card.Body>
                         </Card>
+                        <Button
+                            variant="link"
+                            size="sm"
+                            onClick={this.explode}
+                        >
+                            Reset all
+                        </Button>
                     </Col>
                     <Col>
                         <Card>
