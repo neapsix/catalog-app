@@ -65,22 +65,45 @@ class AppContainer extends React.Component {
     }
 
     removeExcludes(...args) {
-        args.forEach((argsItem) =>
+        args.forEach((argsObject) =>
             this.setState((state) => {
                 return {
-                    excludes: state.excludes.filter(
-                        (excludesItem) => excludesItem !== argsItem
-                    ),
+                    excludes: state.excludes.filter((stateObject) => {
+                            // Objects in the current state.excludes array
+                            // pass the filter if they aren't equal to the 
+                            // object that we're removing. 
+
+                            // Check deep equality for the two objects.
+
+                            // Do they have the same number of keys?
+                            const argsObjectKeys = Object.keys(argsObject)
+                            const stateObjectKeys = Object.keys(stateObject)
+
+                            if (argsObjectKeys.length !== stateObjectKeys.length) {
+                                return true;
+                            }
+
+                            // If so, for each key, do they have the same value?
+                            for (let key of argsObjectKeys) {
+                                if (argsObject[key] !== stateObject[key]) {
+                                    return true;
+                                }
+                            }
+
+                            // If not, they're equal, so this object in the 
+                            // state.excludes array doesn't pass the filter.
+                            return false;
+                    }),
                 }
             })
         )
     }
 
-    handleExcludes(filterString, value) {
+    handleExcludes(filterObject, value) {
         if (!value) {
-            this.addExcludes(filterString)
+            this.addExcludes(filterObject)
         } else {
-            this.removeExcludes(filterString)
+            this.removeExcludes(filterObject)
         }
     }
 
@@ -93,21 +116,38 @@ class AppContainer extends React.Component {
     }
 
     filterDataExcludes(data) {
-        return (
-            data.filter((row) => {
-                return (!this.state.excludes.includes(row.species))
-            })
-        )
+        const newData = data.filter((row) => {
+
+            // Check each object in the state.excludes array against the row.
+            for (let element of this.state.excludes) {
+
+                const columnToCheck = Object.keys(element)[0]
+                const valueToExclude = element[columnToCheck]
+                
+                // If the row has the value to exclude in the specified
+                //  column, don't include it in the filtered array.
+                if (row[columnToCheck] === valueToExclude) {
+                    return false;
+                }
+            }
+
+            // Otherwise, include the row in the filtered array.
+            return true;
+        })
+
+        return newData
     }
 
     filterDataIncludeString(data) {
-        return (
-            data.filter((row) => {
-                return (
-                    JSON.stringify(row).toLowerCase().includes(this.state.includeString.toLowerCase())
-                )
-            })
-        )
+        const newData = data.filter((row) => {
+            const rowString = JSON.stringify(row).toLowerCase()
+            const includeString = this.state.includeString.toLowerCase()
+
+            return rowString.includes(includeString)
+        })
+
+        return newData
+
     }
 
     render() {
@@ -255,7 +295,9 @@ class FilterFormCheckbox extends React.Component {
     }
 
     handleChange(event) {
-        this.props.callback(this.props.label, event.target.checked)
+        const filterObject = {}
+        filterObject[this.props.field] = this.props.label
+        this.props.callback(filterObject, event.target.checked)
     }
 }
 
