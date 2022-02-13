@@ -269,15 +269,22 @@ class FilterForm extends React.Component {
 
 class FilterFormList extends React.Component {
     render() {
-        return this.props.filterOptions.map((filterString) => {
-            return (
-                <FilterFormCheckbox
-                    label={filterString}
-                    field={this.props.forColumn}
-                    callback={this.props.callback}
-                />
-            )
-        })
+        return (
+            <ul className='ul-checkbox'>
+                {this.props.filterOptions.map((filterString, index) => {
+                    return (
+                        <li>
+                            <FilterFormCheckbox
+                                key={index}
+                                label={filterString}
+                                field={this.props.forColumn}
+                                callback={this.props.callback}
+                            />
+                        </li>
+                    )
+                })}
+            </ul>
+        )
     }
 }
 
