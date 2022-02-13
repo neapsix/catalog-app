@@ -136,6 +136,7 @@ class AppContainer extends React.Component {
                             <Card.Body>
                                 <FilterForm
                                     filterOptions={this.generateFilterOptions("species")}
+                                    forColumn="species"
                                     handleExcludes={this.handleExcludes}
                                     handleIncludeString={this.handleIncludeString}
                                 />
@@ -213,6 +214,7 @@ class FilterForm extends React.Component {
             <Form.Group>
                 <FilterFormList
                     filterOptions={this.props.filterOptions}
+                    forColumn={this.props.forColumn}
                     callback={this.props.handleExcludes}
                 />
             </Form.Group>
@@ -226,6 +228,7 @@ class FilterFormList extends React.Component {
             return (
                 <FilterFormCheckbox
                     label={filterString}
+                    field={this.props.forColumn}
                     callback={this.props.callback}
                 />
             )
