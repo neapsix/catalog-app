@@ -176,51 +176,55 @@ class AppContainer extends React.Component {
             <Container fluid="lg" key={this.key}>
                 <Row>
                     <Col xs={3}>
-                        <Card>
-                            <Card.Header>
-                                <Card.Title>Species</Card.Title>
-                            </Card.Header>
-                            <Card.Body>
-                                <FilterForm
-                                    filterOptions={this.generateFilterOptions(
-                                        'species'
-                                    )}
-                                    forColumn="species"
-                                    handleExcludes={this.handleExcludes}
-                                    handleIncludeString={
-                                        this.handleIncludeString
-                                    }
-                                />
-                            </Card.Body>
-                        </Card>
+                        <FilterCard
+                            title="Species"
+                            filterOptions={this.generateFilterOptions(
+                                'species'
+                            )}
+                            forColumn="species"
+                            handleExcludes={this.handleExcludes}
+                        />
                         <Button variant="link" size="sm" onClick={this.explode}>
                             Reset all
                         </Button>
                     </Col>
                     <Col>
-                        <Card>
-                            <Card.Header>
-                                <Row>
-                                    <Col>
-                                        <Card.Title>Catalog</Card.Title>
-                                    </Col>
-                                    <Col>
-                                        <FilterFormField
-                                            callback={this.handleIncludeString}
-                                        />
-                                    </Col>
-                                </Row>
-                            </Card.Header>
-                            <Card.Body>
-                                <CatalogTable
-                                    columns={this.props.fields}
-                                    data={filteredData}
-                                />
-                            </Card.Body>
-                        </Card>
+                        <CatalogTableCard
+                            title="Catalog"
+                            handleIncludeString={this.handleIncludeString}
+                            columns={this.props.fields}
+                            data={filteredData}
+                        />
                     </Col>
                 </Row>
             </Container>
+        )
+    }
+}
+
+class CatalogTableCard extends React.Component {
+    render() {
+        return (
+            <Card>
+                <Card.Header>
+                    <Row>
+                        <Col>
+                            <Card.Title>{this.props.title}</Card.Title>
+                        </Col>
+                        <Col>
+                            <FilterFormField
+                                callback={this.props.handleIncludeString}
+                            />
+                        </Col>
+                    </Row>
+                </Card.Header>
+                <Card.Body>
+                    <CatalogTable
+                        columns={this.props.columns}
+                        data={this.props.data}
+                    />
+                </Card.Body>
+            </Card>
         )
     }
 }
@@ -261,6 +265,25 @@ class CatalogTable extends React.Component {
                     <tbody>{this.dataRows()}</tbody>
                 </Table>
             </>
+        )
+    }
+}
+
+class FilterCard extends React.Component {
+    render() {
+        return (
+            <Card>
+                <Card.Header>
+                    <Card.Title>{this.props.title}</Card.Title>
+                </Card.Header>
+                <Card.Body>
+                    <FilterForm
+                        filterOptions={this.props.filterOptions}
+                        forColumn={this.props.forColumn}
+                        handleExcludes={this.props.handleExcludes}
+                    />
+                </Card.Body>
+            </Card>
         )
     }
 }
