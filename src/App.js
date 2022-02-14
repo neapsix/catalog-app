@@ -105,7 +105,12 @@ const multiFiltersVarious = [
     },
 ]
 function initialState() {
-    return { includeString: '', excludes: [] }
+    return {
+        includeString: '',
+        excludes: [],
+        sortColumn: 'name',
+        sortAscending: true,
+    }
 }
 
 class AppContainer extends React.Component {
@@ -116,6 +121,7 @@ class AppContainer extends React.Component {
 
         this.handleExcludes = this.handleExcludes.bind(this)
         this.handleIncludeString = this.handleIncludeString.bind(this)
+        this.handleSortColumn = this.handleSortColumn.bind(this)
         this.explode = this.explode.bind(this)
 
         this.key = 0
@@ -174,6 +180,15 @@ class AppContainer extends React.Component {
         this.setState({ includeString: filterString })
     }
 
+    handleSortColumn(columnKey) {
+        if (columnKey === this.state.sortColumn) {
+            this.setState({ sortAscending: !this.state.sortAscending })
+        } else {
+            this.setState({ sortColumn: columnKey })
+            this.setState({ sortAscending: true })
+        }
+    }
+
     generateFilterOptions(key) {
         return [...new Set(this.props.data.map((object) => object[key]))]
     }
@@ -228,6 +243,20 @@ class AppContainer extends React.Component {
             filteredData = this.filterDataIncludeString(filteredData)
         }
 
+        let sortedAndFilteredData = [...filteredData]
+        sortedAndFilteredData.sort((a, b) => {
+            // Put "undefined" at the bottom
+            if (!a[this.state.sortColumn]) {
+                return true
+            }
+            // When sorting descending, teturn true if b should come before a.
+            if (!this.state.sortAscending) {
+                return a[this.state.sortColumn] < b[this.state.sortColumn]
+            }
+            // Otherwise, return true if a should come before b.
+            return a[this.state.sortColumn] > b[this.state.sortColumn]
+        })
+
         return (
             <Container fluid="lg" key={this.key}>
                 <Row>
@@ -264,9 +293,12 @@ class AppContainer extends React.Component {
                     <Col>
                         <CatalogTableCard
                             title="Catalog"
-                            handleIncludeString={this.handleIncludeString}
                             columns={this.props.fields}
-                            data={filteredData}
+                            data={sortedAndFilteredData}
+                            handleIncludeString={this.handleIncludeString}
+                            sortColumn={this.state.sortColumn}
+                            sortAscending={this.state.sortAscending}
+                            handleSortColumn={this.handleSortColumn}
                         />
                     </Col>
                 </Row>
@@ -295,6 +327,9 @@ class CatalogTableCard extends React.Component {
                     <CatalogTable
                         columns={this.props.columns}
                         data={this.props.data}
+                        sortColumn={this.props.sortColumn}
+                        sortAscending={this.props.sortAscending}
+                        handleSortColumn={this.props.handleSortColumn}
                     />
                 </Card.Body>
             </Card>
@@ -305,18 +340,19 @@ class CatalogTableCard extends React.Component {
 class CatalogTable extends React.Component {
     headerRow() {
         return (
-            <tr key="0">
-                {this.props.columns.map((column, index) => {
-                    return <th key={index}>{column.label}</th>
-                })}
-            </tr>
+            <CatalogTableHeaderRow
+                columns={this.props.columns}
+                sortColumn={this.props.sortColumn}
+                sortAscending={this.props.sortAscending}
+                callback={this.props.handleSortColumn}
+            />
         )
     }
 
     dataRows() {
         return this.props.data.map((object, index) => {
             return (
-                <CatalogTableRow
+                <CatalogTableDataRow
                     key={index}
                     object={object}
                     columns={this.props.columns}
@@ -342,7 +378,36 @@ class CatalogTable extends React.Component {
     }
 }
 
-class CatalogTableRow extends React.Component {
+class CatalogTableHeaderRow extends React.Component {
+    render() {
+        return (
+            <tr key="0">
+                {this.props.columns.map((column, index) => {
+                    let sortIndicator = ''
+                    if (this.props.sortColumn === column.key) {
+                        if (this.props.sortAscending) {
+                            sortIndicator = ' ⏶'
+                        } else {
+                            sortIndicator = ' ⏷'
+                        }
+                    }
+
+                    return (
+                        <th
+                            key={index}
+                            onClick={() => this.props.callback(column.key)}
+                        >
+                            {column.label}
+                            {sortIndicator}
+                        </th>
+                    )
+                })}
+            </tr>
+        )
+    }
+}
+
+class CatalogTableDataRow extends React.Component {
     constructor(props) {
         super(props)
 
