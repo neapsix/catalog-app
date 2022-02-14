@@ -260,7 +260,7 @@ class AppContainer extends React.Component {
         return (
             <Container fluid="lg" key={this.key}>
                 <Row>
-                    <Col xs={3}>
+                    <Col xs={12} lg={4} xl={3}>
                         <FilterCard
                             title="Species"
                             filterOptions={this.generateFilterOptions(
@@ -290,7 +290,7 @@ class AppContainer extends React.Component {
                             data={this.props.data}
                         />
                     </Col>
-                    <Col>
+                    <Col xs={12} lg={8} xl={9}>
                         <CatalogTableCard
                             title="Catalog"
                             columns={this.props.fields}
