@@ -310,7 +310,7 @@ class AppContainer extends React.Component {
 class CatalogTableCard extends React.Component {
     render() {
         return (
-            <Card>
+            <Card className="CatalogTableCard">
                 <Card.Header>
                     <Row>
                         <Col>
@@ -486,7 +486,7 @@ class CatalogItemDetailsText extends React.Component {
 class FilterCard extends React.Component {
     render() {
         return (
-            <Card>
+            <Card className="FilterCard">
                 <Card.Header>
                     <Card.Title>{this.props.title}</Card.Title>
                 </Card.Header>

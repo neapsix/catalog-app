@@ -13,4 +13,11 @@
   list-style: none;
   padding-left: 0.25rem;
 }
+
+.FilterCard {
+  margin-bottom: 0.5rem;
+}
+
+.CatalogTableCard {
+  margin-bottom: 0.5rem;
 }
