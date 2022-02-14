@@ -1,6 +1,6 @@
 .App {
-  padding-top: 0.5em;
-  padding-bottom: 0.5em;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
 }
 
 .Card-zerostate {
@@ -11,5 +11,6 @@
 
 .ul-checkbox {
   list-style: none;
-  padding-left: 0.25em;
+  padding-left: 0.25rem;
+}
 }
