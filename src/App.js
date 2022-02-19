@@ -231,6 +231,7 @@ class AppContainer extends React.Component {
     }
 
     render() {
+        // Apply filters
         let filteredData = []
 
         if (this.state.excludes[0]) {
@@ -243,11 +244,7 @@ class AppContainer extends React.Component {
             filteredData = this.filterDataIncludeString(filteredData)
         }
 
-        let sortedAndFilteredData = [...filteredData]
-        sortedAndFilteredData.sort((a, b) => {
-            // Put "undefined" at the bottom
-            if (!a[this.state.sortColumn]) {
-                return true
+        // Apply sorting
             }
             // When sorting descending, teturn true if b should come before a.
             if (!this.state.sortAscending) {
@@ -257,6 +254,7 @@ class AppContainer extends React.Component {
             return a[this.state.sortColumn] > b[this.state.sortColumn]
         })
 
+        // Render everything
         return (
             <Container fluid="lg" key={this.key}>
                 <Row>
