@@ -382,7 +382,7 @@ class CatalogTable extends React.Component {
 
         return (
             <>
-                <Table striped bordered hover>
+                <Table responsive striped bordered hover>
                     <thead>{this.headerRow()}</thead>
                     <tbody>{this.dataRows()}</tbody>
                 </Table>
