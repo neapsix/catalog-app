@@ -186,8 +186,7 @@ class AppContainer extends React.Component {
         if (columnKey === this.state.sortColumn) {
             this.setState({ sortAscending: !this.state.sortAscending })
         } else {
-            this.setState({ sortColumn: columnKey })
-            this.setState({ sortAscending: true })
+            this.setState({ sortColumn: columnKey, sortAscending: true })
         }
     }
 
