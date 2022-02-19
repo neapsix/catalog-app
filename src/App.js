@@ -252,7 +252,7 @@ class AppContainer extends React.Component {
             const aValue = a[this.state.sortColumn]
             const bValue = b[this.state.sortColumn]
 
-            // Don't compare values if either one is undefined. Return the 
+            // Don't compare values if either one is undefined. Return the
             // appropriate values to always put undefined rows at the bottom.
             if (!aValue) {
                 return 1
