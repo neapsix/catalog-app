@@ -300,7 +300,7 @@ class AppContainer extends React.Component {
                         </Button>
                         <DownloadCSVButton
                             filename={'catalog_filtered.csv'}
-                            data={this.props.data}
+                            data={sortedAndFilteredData}
                         />
                     </Col>
                     <Col xs={12} lg={8} xl={9}>
