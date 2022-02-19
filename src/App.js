@@ -127,7 +127,6 @@ class AppContainer extends React.Component {
             sortAscending: true,
         }
     }
-    
 
     addExcludes(...args) {
         this.setState((state) => {
