@@ -534,6 +534,7 @@ class FilterCard extends React.Component {
                 </Card.Header>
                 <Card.Body>
                     <FilterForm
+                        title={this.props.title}
                         filterOptions={this.props.filterOptions}
                         overrideLabels={this.props.overrideLabels}
                         forColumn={this.props.forColumn}
@@ -551,6 +552,7 @@ class FilterForm extends React.Component {
         return (
             <Form.Group>
                 <FilterFormList
+                    title={this.props.title}
                     filterOptions={this.props.filterOptions}
                     overrideLabels={this.props.overrideLabels}
                     forColumn={this.props.forColumn}
@@ -593,6 +595,7 @@ class FilterFormList extends React.Component {
             return (
                 <li key={index}>
                     <FilterFormCheckbox
+                        id={this.props.title + index}
                         label={overrideLabel || filterString}
                         filterString={filterString}
                         field={this.props.forColumn}
@@ -614,9 +617,11 @@ class FilterFormList extends React.Component {
         }
 
         return this.props.multiFilters.map((multiFilterObject, index) => {
+            const indexPlusOffset = indexOffset + index
             return (
-                <li key={indexOffset + index}>
+                <li key={indexPlusOffset}>
                     <FilterFormMultiFilterCheckbox
+                        id={this.props.title + indexPlusOffset}
                         label={multiFilterObject.label}
                         filters={multiFilterObject.filters}
                         callback={this.props.callback}
@@ -647,6 +652,7 @@ class FilterFormCheckbox extends React.Component {
     render() {
         return (
             <Form.Check
+                id={this.props.id}
                 type="checkbox"
                 label={this.props.label}
                 defaultChecked="true"
@@ -672,6 +678,7 @@ class FilterFormMultiFilterCheckbox extends React.Component {
     render() {
         return (
             <Form.Check
+                id={this.props.id}
                 type="checkbox"
                 label={this.props.label}
                 defaultChecked="true"
