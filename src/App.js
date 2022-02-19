@@ -104,20 +104,12 @@ const multiFiltersVarious = [
         filters: [{ name: 'Berlioz' }, { species: 'blue-tongued skink' }],
     },
 ]
-function initialState() {
-    return {
-        includeString: '',
-        excludes: [],
-        sortColumn: 'name',
-        sortAscending: true,
-    }
-}
 
 class AppContainer extends React.Component {
     constructor(props) {
         super(props)
 
-        this.state = initialState()
+        this.state = this.initialState()
 
         this.handleExcludes = this.handleExcludes.bind(this)
         this.handleIncludeString = this.handleIncludeString.bind(this)
@@ -126,6 +118,16 @@ class AppContainer extends React.Component {
 
         this.key = 0
     }
+
+    initialState() {
+        return {
+            includeString: '',
+            excludes: [],
+            sortColumn: 'name',
+            sortAscending: true,
+        }
+    }
+    
 
     addExcludes(...args) {
         this.setState((state) => {
@@ -226,7 +228,7 @@ class AppContainer extends React.Component {
     }
 
     explode() {
-        this.setState(initialState())
+        this.setState(this.initialState())
         ++this.key
     }
 
