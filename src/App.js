@@ -234,9 +234,9 @@ class AppContainer extends React.Component {
         let filteredData = []
 
         if (this.state.excludes[0]) {
-            filteredData = this.filterDataExcludes(this.props.data)
+            filteredData = this.filterDataExcludes([...this.props.data])
         } else {
-            filteredData = this.props.data
+            filteredData = [...this.props.data]
         }
 
         if (this.state.includeString) {
