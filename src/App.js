@@ -245,13 +245,25 @@ class AppContainer extends React.Component {
         }
 
         // Apply sorting
+        const sortedAndFilteredData = [...filteredData].sort((a, b) => {
+            const aValue = a[this.state.sortColumn]
+            const bValue = b[this.state.sortColumn]
+
+            // Don't compare values if either of them is blank (i.e. undefined).
+            // Put undefined rows go at the bottom regardless of sort direction.
+            if (!aValue) {
+                return 1
             }
-            // When sorting descending, teturn true if b should come before a.
+            if (!bValue) {
+                return -1
+            }
+
+            // When sorting descending, return true if b should come before a.
             if (!this.state.sortAscending) {
-                return a[this.state.sortColumn] < b[this.state.sortColumn]
+                return aValue < bValue ? -1 : 1
+            } else {
+                return aValue < bValue ? 1 : -1
             }
-            // Otherwise, return true if a should come before b.
-            return a[this.state.sortColumn] > b[this.state.sortColumn]
         })
 
         // Render everything
