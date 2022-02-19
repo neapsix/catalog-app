@@ -245,12 +245,15 @@ class AppContainer extends React.Component {
         }
 
         // Apply sorting
+        /* Note: At time of writing, the sort() function behaves differently 
+        between browsers. In Firefox and Safari, return values true and false 
+        are the same as 1 and -1. In Chrome, they must be 1 and -1. */
         const sortedAndFilteredData = [...filteredData].sort((a, b) => {
             const aValue = a[this.state.sortColumn]
             const bValue = b[this.state.sortColumn]
 
-            // Don't compare values if either of them is blank (i.e. undefined).
-            // Put undefined rows go at the bottom regardless of sort direction.
+            // Don't compare values if either one is undefined. Return the 
+            // appropriate values to always put undefined rows at the bottom.
             if (!aValue) {
                 return 1
             }
