@@ -1,0 +1,50 @@
+[
+    {
+        "id": "1",
+        "name": "Berlioz",
+        "species": "cat",
+        "color": "tuxedo"
+    },
+    {
+        "id": "2",
+        "name": "O'Malley",
+        "species": "cat",
+        "color": "orange"
+    },
+    {
+        "id": "5",
+        "name": "Patou",
+        "species": "dog",
+        "color": "brown"
+    },
+    {
+        "id": "4",
+        "species": "blue-tongued skink",
+        "color": "gray"
+    },
+    {
+        "id": "6",
+        "name": "Scat Cat",
+        "species": "cat",
+        "color": "tuxedo"
+    },
+    {
+        "id": "7",
+        "name": "Uncle Waldo",
+        "species": "goose",
+        "color": "white",
+        "possessions": "great hat"
+    },
+    {
+        "id": "8",
+        "name": "Toulouse",
+        "species": "cat",
+        "color": "orange"
+    },
+    {
+        "id": "1",
+        "name": "Marie",
+        "species": "cat",
+        "color": "white"
+    }
+]

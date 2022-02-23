@@ -1,0 +1,18 @@
+[
+    {
+         "label": "ID",
+         "key": "id"
+    },
+    {
+        "label": "Name",
+        "key": "name"
+    },
+    {
+        "label": "Species",
+        "key": "species"
+    },
+    {
+        "label": "Color",
+        "key": "color"
+    }
+]
