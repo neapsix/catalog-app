@@ -10,9 +10,11 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 - [x] Add custom exclude checkboxes so that the display name doesn't have to match the filter string.
 - [x] Add option to define custom multi-filter checkboxes that exclude several strings.
 - [x] Make table sortable.
+- [x] Deploy on GitLab pages.
+- [x] Use JSON to define data, columns, and filter checkboxes.
 - [ ] Refactor exclude checkboxes:
+    - [x] Define both single- and multi-filter checkboxes using the multi-filter format instead of using forColumn in single-filter checkboxes.
     - [ ]  Keep a state value from the start for each checkbox, instead of the current hack (checked by default, appears in state when unchecked). This change owuld allow for more functional select all/none links instead of the current Reset all link.
-    - [ ] Define both single- and multi-filter checkboxes using the multi-filter format instead of using forColumn in single-filter checkboxes.
 - [ ] Write new README file.
 
 ## Available Scripts

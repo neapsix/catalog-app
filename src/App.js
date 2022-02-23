@@ -14,6 +14,7 @@ import {
 import { CSVLink } from 'react-csv'
 import db from './data/db.json'
 import cols from './data/cols.json'
+import filters from './data/filters.json'
 
 class AppContainer extends React.Component {
     constructor(props) {
@@ -24,6 +25,7 @@ class AppContainer extends React.Component {
         this.handleExcludes = this.handleExcludes.bind(this)
         this.handleIncludeString = this.handleIncludeString.bind(this)
         this.handleSortColumn = this.handleSortColumn.bind(this)
+        this.buildFilterJSON = this.buildFilterJSON.bind(this)
         this.explode = this.explode.bind(this)
 
         this.key = 0
@@ -99,7 +101,7 @@ class AppContainer extends React.Component {
         }
     }
 
-    generateFilterOptions(key) {
+    getUniqueValues(key) {
         return [...new Set(this.props.data.map((object) => object[key]))]
     }
 
@@ -135,6 +137,81 @@ class AppContainer extends React.Component {
         return newData
     }
 
+    buildFilterJSON(jsonString) {
+        // The JSON string contains one or more objects that each represent a
+        // card. We're doing some processing on each object in the JSON string
+        // to return an updated JSON string.
+        const newJSON = jsonString.map((cardObject) => {
+            // Each card object contains one key, the card title. The value for
+            // that key is an array containing some filter definitions.
+            const keyString = Object.keys(cardObject)[0]
+
+            // Begin a new JSON object. The new object will contain the same
+            // key as the existing one, but we'll replace the value for it.
+            let newCardObject = {}
+            let newCardObjectData = []
+
+            // Iterate over the elements within the existing array. Each one
+            // is a JSON object, which either defines a filter checkbox or
+            // indicates that we should generate some dynamically.
+            for (const element of cardObject[keyString]) {
+                // Type "auto" indicates we should dynamically generate filters
+                if (element['type'] === 'auto') {
+                    const column = element['forColumn']
+                    const uniqueValues = this.getUniqueValues(column)
+
+                    // Elements of type auto might specify the overrideLabels
+                    // property, an array of pairs as {"replaceMe": "newLabel"}
+                    const overrideLabels = element['overrideLabels']
+
+                    // For each unique value, generate a filter definition
+                    // using the same format as single filters (type custom)
+                    for (const value of uniqueValues) {
+                        let overrideLabel = ''
+
+                        if (overrideLabels) {
+                            // Check override labels array to see if there's one for
+                            // this value. If not, the label is the value.
+                            for (const label of overrideLabels) {
+                                const optionToOverride = Object.keys(label)[0]
+
+                                if (value === optionToOverride) {
+                                    overrideLabel = label[optionToOverride]
+                                }
+                            }
+                        }
+
+                        // Define a filter checkbox for this value
+                        let newFiltersObject = {}
+
+                        let newFiltersObjectFilters = {}
+                        newFiltersObjectFilters[column] = value
+                        const newFiltersObjectFiltersArray = [
+                            newFiltersObjectFilters,
+                        ]
+
+                        newFiltersObject['type'] = 'dynamic'
+                        newFiltersObject['label'] = overrideLabel || value
+                        newFiltersObject['filters'] =
+                            newFiltersObjectFiltersArray
+
+                        // Add each generated definition to the card data.
+                        newCardObjectData.push(newFiltersObject)
+                    }
+                } else {
+                    // For all other element types, such as "custom,"
+                    // carry over the filter definition as is.
+                    newCardObjectData.push(element)
+                }
+            }
+            // Populate the final card object with the generated card data
+            newCardObject[keyString] = newCardObjectData
+            return newCardObject
+        })
+        // Return the final JSON string containing all the cards.
+        return newJSON
+    }
+
     explode() {
         this.setState(this.initialState())
         ++this.key
@@ -155,8 +232,8 @@ class AppContainer extends React.Component {
         }
 
         // Apply sorting
-        /* Note: At time of writing, the sort() function behaves differently 
-        between browsers. In Firefox and Safari, return values true and false 
+        /* Note: At time of writing, the sort() function behaves differently
+        between browsers. In Firefox and Safari, return values true and false
         are the same as 1 and -1. In Chrome, they must be 1 and -1. */
         const sortedAndFilteredData = [...filteredData].sort((a, b) => {
             const aValue = a[this.state.sortColumn]
@@ -179,32 +256,25 @@ class AppContainer extends React.Component {
             }
         })
 
+        // Build filters JSON
+        let filtersJSON = this.buildFilterJSON(this.props.filters)
+
         // Render everything
         return (
             <Container fluid="lg" key={this.key}>
                 <Row>
                     <Col xs={12} lg={4} xl={3}>
-                        <FilterCard
-                            title="Species"
-                            filterOptions={this.generateFilterOptions(
-                                'species'
-                            )}
-                            forColumn="species"
-                            handleExcludes={this.handleExcludes}
-                        />
-                        <FilterCard
-                            title="Color and Multi-Filters"
-                            filterOptions={this.generateFilterOptions('color')}
-                            overrideLabels={[{ orange: 'tabby' }]}
-                            forColumn="color"
-                            multiFilters={multiFiltersColor}
-                            handleExcludes={this.handleExcludes}
-                        />
-                        <FilterCard
-                            title="Multi-Filters"
-                            multiFilters={multiFiltersVarious}
-                            handleExcludes={this.handleExcludes}
-                        />
+                        {filtersJSON.map((object, index) => {
+                            const keyString = Object.keys(object)[0]
+                            return (
+                                <FilterCard
+                                    key={keyString}
+                                    title={keyString}
+                                    filters={object[keyString]}
+                                    handleExcludes={this.handleExcludes}
+                                />
+                            )
+                        })}
                         <Button variant="link" size="sm" onClick={this.explode}>
                             Reset all
                         </Button>
@@ -448,7 +518,7 @@ class FilterCard extends React.Component {
                         filterOptions={this.props.filterOptions}
                         overrideLabels={this.props.overrideLabels}
                         forColumn={this.props.forColumn}
-                        multiFilters={this.props.multiFilters}
+                        filters={this.props.filters}
                         handleExcludes={this.props.handleExcludes}
                     />
                 </Card.Body>
@@ -466,7 +536,7 @@ class FilterForm extends React.Component {
                     filterOptions={this.props.filterOptions}
                     overrideLabels={this.props.overrideLabels}
                     forColumn={this.props.forColumn}
-                    multiFilters={this.props.multiFilters}
+                    filters={this.props.filters}
                     callback={this.props.handleExcludes}
                 />
             </Form.Group>
@@ -478,62 +548,21 @@ class FilterFormList extends React.Component {
     constructor(props) {
         super(props)
 
-        this.generateSingleFilters = this.generateSingleFilters.bind(this)
-        this.generateMultiFilters = this.generateMultiFilters.bind(this)
+        this.generateFilters = this.generateFilters.bind(this)
     }
 
-    generateSingleFilters() {
-        if (!this.props.filterOptions) {
+    generateFilters() {
+        if (!this.props.filters) {
             return false
         }
 
-        return this.props.filterOptions.map((filterString, index) => {
-            let overrideLabel
-
-            if (this.props.overrideLabels) {
-                // Check override labels array to see if there's one for
-                // this filterString. If not, the label is the filterString
-                for (let element of this.props.overrideLabels) {
-                    const optionToOverride = Object.keys(element)[0]
-
-                    if (filterString === optionToOverride) {
-                        overrideLabel = element[optionToOverride]
-                    }
-                }
-            }
-
+        return this.props.filters.map((filterObject, index) => {
             return (
                 <li key={index}>
                     <FilterFormCheckbox
                         id={this.props.title + index}
-                        label={overrideLabel || filterString}
-                        filterString={filterString}
-                        field={this.props.forColumn}
-                        callback={this.props.callback}
-                    />
-                </li>
-            )
-        })
-    }
-
-    generateMultiFilters() {
-        if (!this.props.multiFilters) {
-            return false
-        }
-
-        let indexOffset = 0
-        if (this.props.filterOptions) {
-            indexOffset = indexOffset + this.props.filterOptions.length
-        }
-
-        return this.props.multiFilters.map((multiFilterObject, index) => {
-            const indexPlusOffset = indexOffset + index
-            return (
-                <li key={indexPlusOffset}>
-                    <FilterFormMultiFilterCheckbox
-                        id={this.props.title + indexPlusOffset}
-                        label={multiFilterObject.label}
-                        filters={multiFilterObject.filters}
+                        label={filterObject.label}
+                        filters={filterObject.filters}
                         callback={this.props.callback}
                     />
                 </li>
@@ -543,42 +572,11 @@ class FilterFormList extends React.Component {
 
     render() {
         // Generate single filter checkboxes
-        return (
-            <ul className="ul-checkbox">
-                {this.generateSingleFilters()}
-                {this.generateMultiFilters()}
-            </ul>
-        )
+        return <ul className="ul-checkbox">{this.generateFilters()}</ul>
     }
 }
 
 class FilterFormCheckbox extends React.Component {
-    constructor(props) {
-        super(props)
-
-        this.handleChange = this.handleChange.bind(this)
-    }
-
-    render() {
-        return (
-            <Form.Check
-                id={this.props.id}
-                type="checkbox"
-                label={this.props.label}
-                defaultChecked="true"
-                onChange={this.handleChange}
-            />
-        )
-    }
-
-    handleChange(event) {
-        const filterObject = {}
-        filterObject[this.props.field] = this.props.filterString
-        this.props.callback(event.target.checked, [filterObject])
-    }
-}
-
-class FilterFormMultiFilterCheckbox extends React.Component {
     constructor(props) {
         super(props)
 
@@ -667,6 +665,7 @@ function App() {
                 name="Catalog App Container"
                 fields={cols}
                 data={db}
+                filters={filters}
             />
         </div>
     )
