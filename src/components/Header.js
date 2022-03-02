@@ -1,7 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './Header.css'
 import React from 'react'
-import { Navbar, Container, Col, Button, ToggleButton } from 'react-bootstrap'
+import { Navbar, Container, Col, Button } from 'react-bootstrap'
 import DownloadCSVButton from './DownloadCSVButton'
 import FilterFormField from './FilterFormField'
 
@@ -30,19 +30,18 @@ class Header extends React.Component {
                         <Col xs={12} lg={8} xl={10} className="p-1">
                             <Navbar.Brand>Catalog App</Navbar.Brand>
                             <Navbar.Text>
-                                <ToggleButton
-                                    variant="outline-primary"
+                                <Button
+                                    variant="primary"
                                     size="sm"
                                     onClick={this.props.handleFilterCollapse}
-                                    type="checkbox"
-                                    checked={this.props.filtersOpen}
+                                    active={this.props.filtersOpen}
                                 >
                                     {this.filterIcon()}
-                                </ToggleButton>
+                                </Button>
                             </Navbar.Text>{' '}
                             <Navbar.Text>
                                 <Button
-                                    variant="secondary"
+                                    variant="primary"
                                     size="sm"
                                     onClick={this.props.handleResetAll}
                                 >

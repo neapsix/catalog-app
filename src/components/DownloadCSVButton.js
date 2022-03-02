@@ -22,7 +22,7 @@ class DownloadCSVButton extends React.Component {
         return (
             <>
                 <Button
-                    variant="secondary"
+                    variant="primary"
                     size="sm"
                     onClick={this.handleClick}
                 >
