@@ -14,8 +14,7 @@ import {
     Form,
     Button,
 } from 'react-bootstrap'
-import { CSVLink } from 'react-csv'
-import Header from './Header';
+import Header from './Header'
 import Footer from './Footer'
 import db from '../data/db.json'
 import cols from '../data/cols.json'
