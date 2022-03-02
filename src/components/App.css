@@ -1,8 +1,3 @@
-.App {
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-}
-
 .Card-zerostate {
   text-align: center;
   color: gray;
@@ -15,9 +10,5 @@
 }
 
 .FilterCard {
-  margin-bottom: 0.5rem;
-}
-
-.CatalogTableCard {
   margin-bottom: 0.5rem;
 }

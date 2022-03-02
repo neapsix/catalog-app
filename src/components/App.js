@@ -1,5 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './App.css'
+import './Header.css'
+import './Footer.css'
 import React from 'react'
 import {
     Container,
@@ -12,9 +14,11 @@ import {
     Button,
 } from 'react-bootstrap'
 import { CSVLink } from 'react-csv'
-import db from './data/db.json'
-import cols from './data/cols.json'
-import filters from './data/filters.json'
+import Header from './Header';
+import Footer from './Footer'
+import db from '../data/db.json'
+import cols from '../data/cols.json'
+import filters from '../data/filters.json'
 
 class AppContainer extends React.Component {
     constructor(props) {
@@ -261,71 +265,45 @@ class AppContainer extends React.Component {
 
         // Render everything
         return (
-            <Container fluid="lg" key={this.key}>
-                <Row>
-                    <Col xs={12} lg={4} xl={3}>
-                        {filtersJSON.map((object, index) => {
-                            const keyString = Object.keys(object)[0]
-                            return (
-                                <FilterCard
-                                    key={keyString}
-                                    title={keyString}
-                                    filters={object[keyString]}
-                                    handleExcludes={this.handleExcludes}
-                                />
-                            )
-                        })}
-                        <Button variant="link" size="sm" onClick={this.explode}>
-                            Reset all
-                        </Button>
-                        <DownloadCSVButton
-                            filename={'catalog_filtered.csv'}
-                            data={sortedAndFilteredData}
-                        />
-                    </Col>
-                    <Col xs={12} lg={8} xl={9}>
-                        <CatalogTableCard
-                            title="Catalog"
-                            columns={this.props.fields}
-                            data={sortedAndFilteredData}
-                            handleIncludeString={this.handleIncludeString}
-                            sortColumn={this.state.sortColumn}
-                            sortAscending={this.state.sortAscending}
-                            handleSortColumn={this.handleSortColumn}
-                        />
-                    </Col>
-                </Row>
-            </Container>
-        )
-    }
-}
-
-class CatalogTableCard extends React.Component {
-    render() {
-        return (
-            <Card className="CatalogTableCard">
-                <Card.Header>
+            <>
+                <Header 
+                    handleIncludeString={this.handleIncludeString}
+                />
+                <Container fluid="lg" key={this.key}>
                     <Row>
-                        <Col>
-                            <Card.Title>{this.props.title}</Card.Title>
+                        <Col xs={12} lg={4} xl={3}>
+                            {filtersJSON.map((object, index) => {
+                                const keyString = Object.keys(object)[0]
+                                return (
+                                    <FilterCard
+                                        key={keyString}
+                                        title={keyString}
+                                        filters={object[keyString]}
+                                        handleExcludes={this.handleExcludes}
+                                    />
+                                )
+                            })}
+                            <Button variant="link" size="sm" onClick={this.explode}>
+                                Reset all
+                            </Button>
+                            <DownloadCSVButton
+                                filename={'catalog_filtered.csv'}
+                                data={sortedAndFilteredData}
+                            />
                         </Col>
-                        <Col>
-                            <FilterFormField
-                                callback={this.props.handleIncludeString}
+                        <Col xs={12} lg={8} xl={9}>
+                            <CatalogTable 
+                                columns={this.props.fields}
+                                data={sortedAndFilteredData}
+                                sortColumn={this.state.sortColumn}
+                                sortAscending={this.state.sortAscending}
+                                handleSortColumn={this.handleSortColumn}
                             />
                         </Col>
                     </Row>
-                </Card.Header>
-                <Card.Body>
-                    <CatalogTable
-                        columns={this.props.columns}
-                        data={this.props.data}
-                        sortColumn={this.props.sortColumn}
-                        sortAscending={this.props.sortAscending}
-                        handleSortColumn={this.props.handleSortColumn}
-                    />
-                </Card.Body>
-            </Card>
+                </Container>
+                <Footer />
+            </>
         )
     }
 }
@@ -597,31 +575,6 @@ class FilterFormCheckbox extends React.Component {
 
     handleChange(event) {
         this.props.callback(event.target.checked, this.props.filters)
-    }
-}
-
-class FilterFormField extends React.Component {
-    constructor(props) {
-        super(props)
-
-        this.handleChange = this.handleChange.bind(this)
-    }
-
-    render() {
-        return (
-            <Form.Control
-                size="sm"
-                type="text"
-                placeholder="Filter"
-                onChange={this.handleChange}
-            />
-        )
-    }
-
-    handleChange(event) {
-        this.props.callback(event.target.value)
-
-        event.preventDefault()
     }
 }
 
