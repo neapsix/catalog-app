@@ -482,10 +482,10 @@ class CatalogItemDetailsText extends React.Component {
     render() {
         return Object.keys(this.props.object).map((element, index) => {
             return (
-                <React.Fragment key={index}>
+                <div key={index} className="text-break">
                     <h5>{element}</h5>
                     <p>{this.props.object[element]}</p>
-                </React.Fragment>
+                </div>
             )
         })
     }
