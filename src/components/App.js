@@ -111,8 +111,25 @@ class AppContainer extends React.Component {
         this.setState({ filtersOpen: !this.state.filtersOpen })
     }
 
-    getUniqueValues(key) {
-        return [...new Set(this.props.data.map((object) => object[key]))]
+    getUniqueValuesSorted(key) {
+        const uniqueValues = new Set(this.props.data.map((object) => object[key]))
+
+        const uniqueValuesSorted = [...uniqueValues].sort((a, b) => {
+
+            // Don't compare values if either one is undefined. Return the
+            // appropriate values to always put undefined rows at the bottom.
+            if (!a) {
+                return 1
+            }
+            if (!b) {
+                return -1
+            }
+
+            return a < b ? -1 : 1
+        })
+
+
+        return uniqueValuesSorted
     }
 
     filterDataExcludes(data) {
@@ -168,7 +185,7 @@ class AppContainer extends React.Component {
                 // Type "auto" indicates we should dynamically generate filters
                 if (element['type'] === 'auto') {
                     const column = element['forColumn']
-                    const uniqueValues = this.getUniqueValues(column)
+                    const uniqueValues = this.getUniqueValuesSorted(column)
 
                     // Elements of type auto might specify the overrideLabels
                     // property, an array of pairs as {"replaceMe": "newLabel"}
