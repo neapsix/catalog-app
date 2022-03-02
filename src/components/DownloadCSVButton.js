@@ -1,7 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
-import React from "react"
-import { Button } from "react-bootstrap"
-import { CSVLink } from "react-csv"
+import React from 'react'
+import { Button } from 'react-bootstrap'
+import { CSVLink } from 'react-csv'
 
 class DownloadCSVButton extends React.Component {
     constructor(props) {
@@ -21,7 +21,11 @@ class DownloadCSVButton extends React.Component {
     render() {
         return (
             <>
-                <Button variant="link" size="sm" onClick={this.handleClick}>
+                <Button
+                    variant="secondary"
+                    size="sm"
+                    onClick={this.handleClick}
+                >
                     Download as CSV
                 </Button>
                 <CSVLink
@@ -36,4 +40,4 @@ class DownloadCSVButton extends React.Component {
     }
 }
 
-export default DownloadCSVButton;
+export default DownloadCSVButton

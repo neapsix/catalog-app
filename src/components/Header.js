@@ -13,9 +13,13 @@ class Header extends React.Component {
                     <Container>
                         <Col xs={12} lg={8} xl={10}>
                             <Navbar.Brand>Catalog App</Navbar.Brand>
-                            <Button variant="link" size="sm" onClick={this.props.handleResetAll}>
-                                Reset all
-                            </Button>
+                                <Button
+                                    variant="secondary"
+                                    size="sm"
+                                    onClick={this.props.handleResetAll}
+                                >
+                                    Reset all
+                                </Button>
                             <DownloadCSVButton
                                 filename={this.props.downloadFilename}
                                 data={this.props.downloadData}
