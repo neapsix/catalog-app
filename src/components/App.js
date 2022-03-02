@@ -196,6 +196,10 @@ class AppContainer extends React.Component {
                     for (const value of uniqueValues) {
                         let overrideLabel = ''
 
+                        if (!value) {
+                          overrideLabel = 'Blanks'
+                        }
+
                         if (overrideLabels) {
                             // Check override labels array to see if there's one for
                             // this value. If not, the label is the value.
