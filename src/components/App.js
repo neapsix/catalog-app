@@ -291,7 +291,7 @@ class AppContainer extends React.Component {
                                 />
                             </Col>
                         </Collapse>
-                        <Col>
+                        <Col className="overflow-scroll">
                             <CatalogTable
                                 columns={this.props.fields}
                                 data={sortedAndFilteredData}
@@ -340,7 +340,7 @@ class CatalogTable extends React.Component {
 
         return (
             <>
-                <Table responsive striped bordered hover>
+                <Table striped bordered hover>
                     <thead>{this.headerRow()}</thead>
                     <tbody>{this.dataRows()}</tbody>
                 </Table>
