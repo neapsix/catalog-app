@@ -291,7 +291,7 @@ class AppContainer extends React.Component {
                                 />
                             </Col>
                         </Collapse>
-                        <Col className="overflow-scroll">
+                        <Col className="Scroll-horizontal-only">
                             <CatalogTable
                                 columns={this.props.fields}
                                 data={sortedAndFilteredData}

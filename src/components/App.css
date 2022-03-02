@@ -19,3 +19,7 @@
   white-space: nowrap;
   overflow: hidden;
 }
+
+.Scroll-horizontal-only {
+  overflow-x: auto;
+}
