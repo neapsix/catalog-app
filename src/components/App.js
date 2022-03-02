@@ -29,6 +29,7 @@ class AppContainer extends React.Component {
         this.handleExcludes = this.handleExcludes.bind(this)
         this.handleIncludeString = this.handleIncludeString.bind(this)
         this.handleSortColumn = this.handleSortColumn.bind(this)
+        this.handleFilterCollapse = this.handleFilterCollapse.bind(this)
         this.buildFilterJSON = this.buildFilterJSON.bind(this)
         this.explode = this.explode.bind(this)
 
@@ -104,6 +105,10 @@ class AppContainer extends React.Component {
         } else {
             this.setState({ sortColumn: columnKey, sortAscending: true })
         }
+    }
+
+    handleFilterCollapse() {
+        this.setState({ filtersOpen: !this.state.filtersOpen })
     }
 
     getUniqueValues(key) {
@@ -267,23 +272,27 @@ class AppContainer extends React.Component {
         // Render everything
         return (
             <>
-                <Header 
+                <Header
                     handleIncludeString={this.handleIncludeString}
                     handleResetAll={this.explode}
+                    filtersOpen={this.state.filtersOpen}
+                    handleFilterCollapse={this.handleFilterCollapse}
                     downloadFilename={'catalog_filtered.csv'}
                     downloadData={sortedAndFilteredData}
                 />
-                <Container fluid="lg" key={this.key}>
+                <Container fluid key={this.key}>
                     <Row>
-                        <Col xs={12} lg={4} xl={3}>
-                            <Filters 
-                                filtersJSON={filtersJSON}
-                                handleExcludes={this.handleExcludes}
-                                open={this.state.filtersOpen}
-                            />
-                        </Col>
-                        <Col xs={12} lg={8} xl={9}>
-                            <CatalogTable 
+                        <Collapse in={this.state.filtersOpen}>
+                            <Col xs={12} lg={3} xxl={2}>
+                                <Filters
+                                    filtersJSON={filtersJSON}
+                                    handleExcludes={this.handleExcludes}
+                                    open={this.state.filtersOpen}
+                                />
+                            </Col>
+                        </Collapse>
+                        <Col>
+                            <CatalogTable
                                 columns={this.props.fields}
                                 data={sortedAndFilteredData}
                                 sortColumn={this.state.sortColumn}
@@ -476,25 +485,18 @@ class CatalogItemDetailsText extends React.Component {
 
 class Filters extends React.Component {
     render() {
-        return (
-            <Collapse in={this.props.open}>
-                <div>
-                {this.props.filtersJSON.map((object, index) => {
-                    const keyString = Object.keys(object)[0]
-                    return (
-                        <FilterCard
-                            key={keyString}
-                            title={keyString}
-                            filters={object[keyString]}
-                            handleExcludes={this.props.handleExcludes}
-                        />
-                    )
-                })}
-                </div>
-            </Collapse>
-        )
+        return this.props.filtersJSON.map((object, index) => {
+            const keyString = Object.keys(object)[0]
+            return (
+                <FilterCard
+                    key={keyString}
+                    title={keyString}
+                    filters={object[keyString]}
+                    handleExcludes={this.props.handleExcludes}
+                />
+            )
+        })
     }
-
 }
 
 class FilterCard extends React.Component {
