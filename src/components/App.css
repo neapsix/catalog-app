@@ -12,3 +12,10 @@
 .FilterCard {
   margin-bottom: 0.5rem;
 }
+
+.Table-truncate {
+  min-width: 64px;
+  max-width: 512px;
+  white-space: nowrap;
+  overflow: hidden;
+}

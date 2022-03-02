@@ -396,6 +396,7 @@ class CatalogTableHeaderRow extends React.Component {
                     return (
                         <th
                             key={index}
+                            className="Table-truncate"
                             onClick={() => this.props.callback(column.key)}
                         >
                             {column.label} {sortIndicator}
@@ -428,7 +429,14 @@ class CatalogTableDataRow extends React.Component {
             // hidden ("d-none") cell to hold the modal Details form.
             <tr onClick={this.handleClick}>
                 {this.props.columns.map((column, index) => {
-                    return <td key={index}>{this.props.object[column.key]}</td>
+                    return (
+                        <td
+                            key={index}
+                            className="Table-truncate"
+                        >
+                                {this.props.object[column.key]}
+                        </td>
+                    )
                 })}
                 <td className="d-none">
                     <CatalogItemDetailsModal
