@@ -7,6 +7,7 @@ import {
     Container,
     Row,
     Col,
+    Collapse,
     Card,
     Table,
     Modal,
@@ -41,6 +42,7 @@ class AppContainer extends React.Component {
             excludes: [],
             sortColumn: 'name',
             sortAscending: true,
+            filtersOpen: true,
         }
     }
 
@@ -268,27 +270,17 @@ class AppContainer extends React.Component {
             <>
                 <Header 
                     handleIncludeString={this.handleIncludeString}
+                    handleResetAll={this.explode}
+                    downloadFilename={'catalog_filtered.csv'}
+                    downloadData={sortedAndFilteredData}
                 />
                 <Container fluid="lg" key={this.key}>
                     <Row>
                         <Col xs={12} lg={4} xl={3}>
-                            {filtersJSON.map((object, index) => {
-                                const keyString = Object.keys(object)[0]
-                                return (
-                                    <FilterCard
-                                        key={keyString}
-                                        title={keyString}
-                                        filters={object[keyString]}
-                                        handleExcludes={this.handleExcludes}
-                                    />
-                                )
-                            })}
-                            <Button variant="link" size="sm" onClick={this.explode}>
-                                Reset all
-                            </Button>
-                            <DownloadCSVButton
-                                filename={'catalog_filtered.csv'}
-                                data={sortedAndFilteredData}
+                            <Filters 
+                                filtersJSON={filtersJSON}
+                                handleExcludes={this.handleExcludes}
+                                open={this.state.filtersOpen}
                             />
                         </Col>
                         <Col xs={12} lg={8} xl={9}>
@@ -481,6 +473,29 @@ class CatalogItemDetailsText extends React.Component {
             )
         })
     }
+}
+
+class Filters extends React.Component {
+    render() {
+        return (
+            <Collapse in={this.props.open}>
+                <div>
+                {this.props.filtersJSON.map((object, index) => {
+                    const keyString = Object.keys(object)[0]
+                    return (
+                        <FilterCard
+                            key={keyString}
+                            title={keyString}
+                            filters={object[keyString]}
+                            handleExcludes={this.props.handleExcludes}
+                        />
+                    )
+                })}
+                </div>
+            </Collapse>
+        )
+    }
+
 }
 
 class FilterCard extends React.Component {
