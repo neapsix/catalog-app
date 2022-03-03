@@ -1,25 +1,3 @@
-.Card-zerostate {
-  text-align: center;
-  color: gray;
-  min-height: 2vh;
-}
-
-.ul-checkbox {
-  list-style: none;
-  padding-left: 0.25rem;
-}
-
-.FilterCard {
-  margin-bottom: 0.5rem;
-}
-
-.Table-truncate {
-  min-width: 64px;
-  max-width: 512px;
-  white-space: nowrap;
-  overflow: hidden;
-}
-
 .Scroll-horizontal-only {
   overflow-x: auto;
 }

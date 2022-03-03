@@ -1,0 +1,12 @@
+.Card-zerostate {
+  text-align: center;
+  color: gray;
+  min-height: 2vh;
+}
+
+.Table-truncate {
+  min-width: 64px;
+  max-width: 512px;
+  white-space: nowrap;
+  overflow: hidden;
+}
