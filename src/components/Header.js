@@ -3,7 +3,7 @@ import './Header.css'
 import React from 'react'
 import { Navbar, Container, Col, Button } from 'react-bootstrap'
 import DownloadCSVButton from './DownloadCSVButton'
-import FilterFormField from './FilterFormField'
+import FilterField from './FilterField'
 
 class Header extends React.Component {
     // From bootstrap-icons: funnel
@@ -56,7 +56,7 @@ class Header extends React.Component {
                             </Navbar.Text>
                         </Col>
                         <Col className="p-1">
-                            <FilterFormField
+                            <FilterField
                                 callback={this.props.handleIncludeString}
                             />
                         </Col>

@@ -2,7 +2,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import React from 'react'
 import { Form } from 'react-bootstrap';
 
-class FilterFormField extends React.Component {
+class FilterField extends React.Component {
     constructor(props) {
         super(props)
 
@@ -27,4 +27,4 @@ class FilterFormField extends React.Component {
     }
 }
 
-export default FilterFormField
+export default FilterField
