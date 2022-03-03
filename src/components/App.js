@@ -305,7 +305,7 @@ class AppContainer extends React.Component {
                     <Row>
                         <Collapse in={this.state.filtersOpen}>
                             <Col xs={12} lg={3} xxl={2}>
-                                <Filters
+                                <CatalogFilters
                                     filtersJSON={filtersJSON}
                                     handleExcludes={this.handleExcludes}
                                     open={this.state.filtersOpen}
@@ -512,7 +512,7 @@ class CatalogItemDetailsText extends React.Component {
     }
 }
 
-class Filters extends React.Component {
+class CatalogFilters extends React.Component {
     render() {
         return this.props.filtersJSON.map((object, index) => {
             const keyString = Object.keys(object)[0]
